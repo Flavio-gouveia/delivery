@@ -8,10 +8,10 @@ import ProductExtras from '@/components/ProductExtras'
 import AddToCartButton from '@/components/AddToCartButton'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     storeSlug: string
     productId: string
-  }
+  }>
 }
 
 async function getProduct(productId: string): Promise<Product | null> {
@@ -67,9 +67,10 @@ async function getProductExtras(productId: string): Promise<string[]> {
 }
 
 export default async function ProductPage({ params }: PageProps) {
+  const { storeSlug, productId } = await params
   const [product, store, allExtras] = await Promise.all([
-    getProduct(params.productId),
-    getStore(params.storeSlug),
+    getProduct(productId),
+    getStore(storeSlug),
     getExtras('') // We'll get this after we have the store
   ])
 
@@ -78,7 +79,7 @@ export default async function ProductPage({ params }: PageProps) {
   }
 
   const extras = await getExtras(store.id)
-  const productExtraIds = await getProductExtras(params.productId)
+  const productExtraIds = await getProductExtras(productId)
   const availableExtras = extras.filter(extra => productExtraIds.includes(extra.id))
 
   return (
@@ -86,7 +87,7 @@ export default async function ProductPage({ params }: PageProps) {
       <header className="bg-white shadow-sm sticky top-0 z-40">
         <div className="max-w-4xl mx-auto px-4 py-4">
           <Link 
-            href={`/${params.storeSlug}`}
+            href={`/${storeSlug}`}
             className="text-primary-600 hover:text-primary-700 font-medium"
           >
             ← Voltar ao cardápio
@@ -132,7 +133,7 @@ export default async function ProductPage({ params }: PageProps) {
 
             <AddToCartButton 
               product={product}
-              storeSlug={params.storeSlug}
+              storeSlug={storeSlug}
               availableExtras={availableExtras}
             />
           </div>

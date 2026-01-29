@@ -6,9 +6,9 @@ import CategorySection from '@/components/CategorySection'
 import CartButton from '@/components/CartButton'
 
 interface PageProps {
-  params: {
+  params: Promise<{
     storeSlug: string
-  }
+  }>
 }
 
 async function getStore(storeSlug: string): Promise<Store | null> {
@@ -47,7 +47,8 @@ async function getProducts(categoryId: string): Promise<Product[]> {
 }
 
 export default async function StorePage({ params }: PageProps) {
-  const store = await getStore(params.storeSlug)
+  const { storeSlug } = await params
+  const store = await getStore(storeSlug)
 
   if (!store) {
     notFound()
@@ -78,7 +79,7 @@ export default async function StorePage({ params }: PageProps) {
                   key={category.id}
                   category={category}
                   products={products}
-                  storeSlug={params.storeSlug}
+                  storeSlug={storeSlug}
                 />
               )
             })

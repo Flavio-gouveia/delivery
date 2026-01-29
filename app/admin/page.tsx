@@ -5,7 +5,7 @@ import { useRouter } from 'next/navigation'
 import Link from 'next/link'
 import { supabase } from '@/lib/supabaseClient'
 import { Store } from '@/types'
-import { Package, TagPlus, PlusCircle, Settings, LogOut, Store as StoreIcon } from 'lucide-react'
+import { Package, PlusCircle, Settings, LogOut, Store as StoreIcon, Tag } from 'lucide-react'
 
 export default function AdminDashboard() {
   const router = useRouter()
@@ -110,7 +110,7 @@ export default function AdminDashboard() {
             >
               <div className="flex items-center gap-4">
                 <div className="p-3 bg-green-100 rounded-lg">
-                  <TagPlus className="text-green-600" size={24} />
+                  <Tag className="text-green-600" size={24} />
                 </div>
                 <div>
                   <h3 className="text-lg font-semibold text-gray-900">Categorias</h3>

@@ -3,13 +3,14 @@ import { supabase } from '@/lib/supabaseClient'
 
 export async function GET(
   request: Request,
-  { params }: { params: { storeSlug: string } }
+  { params }: { params: Promise<{ storeSlug: string }> }
 ) {
+  const { storeSlug } = await params
   try {
     const { data: store, error } = await supabase
       .from('stores')
       .select('*')
-      .eq('slug', params.storeSlug)
+      .eq('slug', storeSlug)
       .single()
 
     if (error || !store) {
